@@ -14,19 +14,16 @@ import {
   Typography,
   Card,
   CardHeader,
-  CardContent,
-  CardActions,
   IconButton,
-  Chip
+  Chip,
+  AppBar,
+  Toolbar
 } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import FavoriteIcon from "@material-ui/icons/Favorite";
 import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
-//import { sizing } from '@material-ui/system';
 const useStyle = makeStyles({
-  select_root:{
-    minWidth:"140px"
+  filterSelect_root:{
+    width:"200px"
   },
   container_root:{
     backgroundColor:"#e0e0e0",
@@ -55,37 +52,43 @@ function Main(props){
         }}
       >
         <Grid  xl="3" lg="5" md="6" sm="12" xs="12">
+          <AppBar position="static">
+            <Toolbar>
+              <Typography variant="h6" className={classes.title}>
+                Todos (10)
+              </Typography>
+              
+            </Toolbar>
+          </AppBar>
           <Container className={classes.container_root}>
           <Box component="div">
-            <Grid container direction="row" spacing={5} justify="center" xs="12" alignItems="space-between">
-              <Grid item>
+            <Grid container direction="row" xs="12" lg="12" md="12" xl="12" justify="center" spacing={1}>
+              {/* <Grid item>
                 <Fab size="large" color="primary" aria-label="add">
                   <AddIcon/>
                 </Fab>
-              </Grid>
-              <Grid item>
+              </Grid> */}
+              <Grid xs="6" lg="8" item>
                 <TextField
-                  style={{minWidth:"300px"}}
+                  style={{width:"100%"}}
                   id="search-field"
-                  label="Search"
+                  label="Add a todo"
+                  placeholder="Write a todo then hit Enter"
                   variant="outlined"
-                  boxShadow={2}
                 />
               </Grid>
-              <Grid item>
+              <Grid item xs="6" lg="4">
               <FormControl variant="outlined">
-                <InputLabel id="sort-select-label">Sort</InputLabel>
+                <InputLabel id="filter-select-label">Filter</InputLabel>
                   <Select
-                    labelId="sort-select-label"
-                    id="sort-select"
+                    labelId="filter-select-label"
+                    id="filter-select"
                     // value={10}
                     // onChange={handleChange}
-                    label="Sort"
-                    className={classes.select_root}
+                    label="Filter"
+                    className={classes.filterSelect_root}
                   >
-                    <MenuItem value=""><em>None</em></MenuItem>
-                    <MenuItem value="asc">Ascending</MenuItem>
-                    <MenuItem value="desc">Descending</MenuItem>
+                    <MenuItem value="all">All</MenuItem>
                     <MenuItem value="completed">Completed</MenuItem>
                     <MenuItem value="incompleted">Incompleted</MenuItem>
                   </Select>
@@ -98,43 +101,19 @@ function Main(props){
             <CardHeader
               action={
                 <>
-                  <IconButton aria-label="remove">
+                  <IconButton aria-label="delete">
                     <DeleteIcon />
                   </IconButton>
                   <Chip label="Completed" deleteIcon={<DoneIcon />} onDelete={()=>null} />
                 </>
               }
               className={classes.cardHeader_root}
-              title="Shrimp and Chorizo Paella"
+              title="First task"
             />
-            {/* <CardActions disableSpacing >
-              <IconButton aria-label="add to favorites">
-                <FavoriteIcon />
-              </IconButton>
-              <IconButton aria-label="remove">
-                <DeleteIcon />
-              </IconButton>
-            </CardActions> */}
           </Card>
           </Box>
           </Container>
         </Grid>
-        {/* <Card>
-          <CardContent>
-          </CardContent>
-          <CardActions>
-            <Button color="primary" variant="contained" onClick={() => console.log("HI")}>
-              Increment
-            </Button>
-            <Button
-              color="secondary"
-              variant="contained"
-              onClick={() => console.log("HI")}
-            >
-              Decrement
-            </Button>
-          </CardActions>
-        </Card> */}
       </div>
     );
 }
