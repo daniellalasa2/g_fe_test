@@ -1,5 +1,6 @@
 import React from "react";
-import {Card,CardHeader,IconButton,Chip,makeStyles} from "@material-ui/core"
+import {useDispatch, useSelector} from "redux";
+import {Card, CardHeader, IconButton, Chip, makeStyles} from "@material-ui/core"
 import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
 
