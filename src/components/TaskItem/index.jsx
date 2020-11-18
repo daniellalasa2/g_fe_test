@@ -1,7 +1,8 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useCallback} from "react";
 import {useDispatch} from "react-redux";
 import {removeTodo, editTodo} from "../../redux/todos/actions";
 import classNames from "classnames";
+import ContentEditable from 'react-contenteditable';
 import {Card, CardHeader, IconButton, Chip, makeStyles} from "@material-ui/core"
 import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
@@ -23,52 +24,68 @@ const useStyle = makeStyles({
   },
   itemTitleSpan:{
     outline:"none",
+    border:"none",
     overflow: "hidden"
+  },
+  emptyTitle:{
+    color:"#c0c0c0",
+    fontStyle: "italic"
   }
+
 });
 
 export default function TaskItem(props){
-    const {id, title, completedStatus} = props;
-    const [editMode, setEditMode] = useState(false);
-
+    const {id, completedStatus} = props;
+    const [title,setTitle] = useState(props.title);
     const classes = useStyle();
 
     const dispatchRemoveTodo = useDispatch();
     const dispatchEditTodo = useDispatch();
 
-    const handleDeleteTodo = (_id)=>{
+    const handleTitleOnChange = (e)=>{
+      const value = e.currentTarget.innerText.trim();
+      setTitle(value);
+      if(value.length == 0){
+        setTitle("New Task");
+      }
+    }
+    const handleDeleteTodo = ()=>{
       // TODO: ask from user ,are sure or not?(popover, modal)
-      dispatchRemoveTodo(removeTodo({id: _id}));
+      dispatchRemoveTodo(removeTodo({id}));
     };
-    const toggleTaskStatus = (_id, _completedStatus)=>{
-      dispatchEditTodo(editTodo({id: _id, completedStatus:!_completedStatus}));
+    const handleEditTodo = (_title)=>{
+      dispatchEditTodo(editTodo({id, title:_title}));
+      handleTitleOnChange(_title);
     };
-    const ContentEditable = (props)=>{
-      const {onChange} = props;
-      const ref = useRef();
-      console.log(ref);
-      ref.current.addEventListener("input",(e)=>{onChange(e)});
-      return <span ref={ref} contentEditable {...props}>{title}</span>
+    const toggleTaskStatus = ()=>{
+      dispatchEditTodo(editTodo({id, completedStatus:!completedStatus}));
     };
+    
     return(
-        <Card className={classes.card_root} draggable>
+        <Card className={classes.card_root}>
             <CardHeader
             action={
                 <div className={classes.cardHeader_action}>
-                <IconButton aria-label="delete" onClick={() => handleDeleteTodo(id)}>
+                <IconButton aria-label="delete" onClick={handleDeleteTodo}>
                     <DeleteIcon />
                 </IconButton>
                 <Chip 
                     className={classNames(classes.chip.colorPrimary, classes.chip.colorSecondary)} 
-                    label={completedStatus ? "Completed" : "Incomplete"} 
+                    label={ completedStatus ? "Completed" : "Incomplete" } 
                     color={ completedStatus ? "primary" : "secondary" } 
-                    icon={completedStatus ? <DoneIcon style={{direction:"right"}}/> : ()=>{}}
-                    onClick={() => toggleTaskStatus(id, completedStatus)} 
+                    icon={completedStatus ? <DoneIcon style={{direction:"right"}}/> : <></>}
+                    onClick={toggleTaskStatus} 
                 />
                 </div>
             }
             className={classes.cardHeader_root}
-            title={<ContentEditable className={classes.itemTitleSpan} onChange={(e)=>console.log("editable: ",e)}/>}
+            title={<ContentEditable 
+                      tagName="span"
+                      html={props.title ? props.title : "New task"}
+                      onChange = {(e)=>handleTitleOnChange(e)}
+                      className={classNames(classes.itemTitleSpan,title.length == 0 && classes.emptyTitle)}
+                      onBlur={()=>handleEditTodo(title)}
+                    />}
             />
         </Card>
     );

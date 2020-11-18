@@ -11,7 +11,7 @@ export default function AddField(){
 
     const handleAddTodo = (e)=>{
       // If user hits Enter
-      if(fieldValue.length > 0 && e.charCode === 13){
+      if(fieldValue.trim().length > 0 && e.charCode === 13){
         // Remove input value
         setFieldValue("");
         dispatchAddTodo(addTodo({title: fieldValue}));
@@ -27,7 +27,6 @@ export default function AddField(){
         value = {fieldValue}
         onChange  = {e => setFieldValue(e.currentTarget.value)}
         onKeyPress = {handleAddTodo}
-        autocapitalize="on"
       />
     );
 
