@@ -1,4 +1,6 @@
-import React from "react"
+import React from "react";
+import {useDispatch,useSelector} from "react-redux";
+import {setFilter} from "../../redux/filter/actions";
 import {FormControl,InputLabel,MenuItem,Select,makeStyles} from "@material-ui/core";
 
 const useStyle= makeStyles({
@@ -6,8 +8,20 @@ const useStyle= makeStyles({
         width:"200px"
       }
 });
+const filtersList = [
+    {id:1, title:"All", value:"all"},
+    {id:2 ,title:"Incomplete", value:"incomplete"},
+    {id:3 ,title:"Completed", value:"completed"}
+];
 export default function Filter(props){
     const classes = useStyle();
+    const activeFilter = useSelector(store=>store.filter.filter);
+    const dispatchFilter = useDispatch();
+
+    const handleFilterChange = (e)=>{
+        dispatchFilter(setFilter({filter:e.target.value}));
+
+    }
     return(
         <FormControl variant="outlined">
             <InputLabel id="filter-select-label">Filter</InputLabel>
@@ -15,13 +29,14 @@ export default function Filter(props){
             labelId="filter-select-label"
             id="filter-select"
             // value={10}
-            // onChange={handleChange}
+            onChange={handleFilterChange}
             label="Filter"
+            value={activeFilter}
             className={classes.filterSelect_root}
             >
-                <MenuItem value="all" default>All</MenuItem>
-                <MenuItem value="completed">Completed</MenuItem>
-                <MenuItem value="incompleted">Incompleted</MenuItem>
+                {
+                    filtersList.map(item=><MenuItem key={item.id} value={item.value}>{item.title}</MenuItem>)
+                }
             </Select>
         </FormControl>
     );
