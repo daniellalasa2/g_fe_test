@@ -5,8 +5,11 @@ import {FormControl,InputLabel,MenuItem,Select,makeStyles} from "@material-ui/co
 
 const useStyle= makeStyles({
     filterSelect_root:{
-        width:"200px"
-      }
+        width:"100%"
+      },
+    formControl_root:{
+        width:"100%"
+    }
 });
 const filtersList = [
     {id:1, title:"All", value:"all"},
@@ -22,12 +25,12 @@ export default function Filter(props){
         dispatchFilter(setFilter({filter:e.target.value}));
     }
     return(
-        <FormControl variant="outlined">
+        <FormControl variant="outlined" className={classes.formControl_root}>
             <InputLabel id="filter-select-label">Filter</InputLabel>
             <Select
+            autoWidth
             labelId="filter-select-label"
             id="filter-select"
-            // value={10}
             onChange={handleFilterChange}
             label="Filter"
             value={activeFilter}

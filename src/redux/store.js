@@ -5,7 +5,10 @@ import rootReducer from "./rootReducer";
 
 function configureStore(initialState) {
   // You can use logger for debugging purposes
-  const middleware = [thunk,logger];
+  const middleware = [
+    thunk,
+  //  logger
+  ];
   const store = createStore(
     rootReducer,
     initialState,

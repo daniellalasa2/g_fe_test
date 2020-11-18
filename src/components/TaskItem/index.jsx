@@ -18,10 +18,6 @@ const useStyle = makeStyles({
   cardHeader_action:{
     margin:"8px 8px 0 0"
   },
-  chip:{
-    colorPrimary: { backgroundColor: "yellow" },
-    colorSecondary: { backgroundColor: "lightgreen" }
-  },
   itemTitleSpan:{
     outline:"none",
     border:"none",
@@ -57,7 +53,6 @@ export default function TaskItem(props){
                     <DeleteIcon />
                 </IconButton>
                 <Chip 
-                    className={classNames(classes.chip.colorPrimary, classes.chip.colorSecondary)} 
                     label={ completedStatus ? "Completed" : "Incomplete" } 
                     color={ completedStatus ? "primary" : "secondary" } 
                     icon={completedStatus ? <DoneIcon style={{direction:"right"}}/> : <></>}
