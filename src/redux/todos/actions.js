@@ -17,11 +17,7 @@ export const editTodo = (data = {})=>{
     const {id, title, completedStatus} = data;
     return {
         type: EDIT_TODO,
-        payload: {
-            id: id,
-            title: title,
-            completedStatus: completedStatus
-        }
+        payload: data
     }
 };
 

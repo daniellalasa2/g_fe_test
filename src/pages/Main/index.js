@@ -17,7 +17,7 @@ const useStyle = makeStyles({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    marginTop:"200px"
+    marginTop:"20px"
   }
 });
 
@@ -28,9 +28,10 @@ function Main(props){
       return _todosList.map(item => <TaskItem key={`TaskItem${item.id}`} id={item.id} title={item.title} completedStatus={item.completedStatus}/>);
     };
     return(
-        <div className={classes.main_root}>
+      <>
+      <HeaderBar title="Todos"/>
+      <div className={classes.main_root}>
         <Grid>
-          <HeaderBar title="Todos"/>
           <Container className={classes.container_root}>
           <Box component="div">
             <Grid container direction="row" justify="center" spacing={1}>
@@ -48,6 +49,7 @@ function Main(props){
           </Container>
         </Grid>
       </div>
+      </>
     );
 }
 
