@@ -26,36 +26,23 @@ const useStyle = makeStyles({
     outline:"none",
     border:"none",
     overflow: "hidden"
-  },
-  emptyTitle:{
-    color:"#c0c0c0",
-    fontStyle: "italic"
   }
 
 });
 
 export default function TaskItem(props){
-    const {id, completedStatus} = props;
-    const [title,setTitle] = useState(props.title);
+    const {id, title, completedStatus} = props;
     const classes = useStyle();
 
     const dispatchRemoveTodo = useDispatch();
     const dispatchEditTodo = useDispatch();
 
-    const handleTitleOnChange = (e)=>{
-      const value = e.currentTarget.innerText.trim();
-      setTitle(value);
-      if(value.length == 0){
-        setTitle("New Task");
-      }
-    }
     const handleDeleteTodo = ()=>{
       // TODO: ask from user ,are sure or not?(popover, modal)
       dispatchRemoveTodo(removeTodo({id}));
     };
     const handleEditTodo = (_title)=>{
       dispatchEditTodo(editTodo({id, title:_title}));
-      handleTitleOnChange(_title);
     };
     const toggleTaskStatus = ()=>{
       dispatchEditTodo(editTodo({id, completedStatus:!completedStatus}));
@@ -81,10 +68,9 @@ export default function TaskItem(props){
             className={classes.cardHeader_root}
             title={<ContentEditable 
                       tagName="span"
-                      html={props.title ? props.title : "New task"}
-                      onChange = {(e)=>handleTitleOnChange(e)}
-                      className={classNames(classes.itemTitleSpan,title.length == 0 && classes.emptyTitle)}
-                      onBlur={()=>handleEditTodo(title)}
+                      html={title ? title : "New task"}
+                      className={classNames(classes.itemTitleSpan)}
+                      onBlur={(e)=>handleEditTodo(e.currentTarget.innerText.trim())}
                     />}
             />
         </Card>
