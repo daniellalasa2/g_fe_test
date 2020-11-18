@@ -1,5 +1,5 @@
-import React, {useState, useCallback} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import React, {useState, useRef} from "react";
+import {useDispatch} from "react-redux";
 import {removeTodo, editTodo} from "../../redux/todos/actions";
 import classNames from "classnames";
 import {Card, CardHeader, IconButton, Chip, makeStyles} from "@material-ui/core"
@@ -20,14 +20,22 @@ const useStyle = makeStyles({
   chip:{
     colorPrimary: { backgroundColor: "yellow" },
     colorSecondary: { backgroundColor: "lightgreen" }
+  },
+  itemTitleSpan:{
+    outline:"none",
+    overflow: "hidden"
   }
 });
 
 export default function TaskItem(props){
     const {id, title, completedStatus} = props;
+    const [editMode, setEditMode] = useState(false);
+
     const classes = useStyle();
+
     const dispatchRemoveTodo = useDispatch();
     const dispatchEditTodo = useDispatch();
+
     const handleDeleteTodo = (_id)=>{
       // TODO: ask from user ,are sure or not?(popover, modal)
       dispatchRemoveTodo(removeTodo({id: _id}));
@@ -35,8 +43,15 @@ export default function TaskItem(props){
     const toggleTaskStatus = (_id, _completedStatus)=>{
       dispatchEditTodo(editTodo({id: _id, completedStatus:!_completedStatus}));
     };
+    const ContentEditable = (props)=>{
+      const {onChange} = props;
+      const ref = useRef();
+      console.log(ref);
+      ref.current.addEventListener("input",(e)=>{onChange(e)});
+      return <span ref={ref} contentEditable {...props}>{title}</span>
+    };
     return(
-        <Card className={classes.card_root}>
+        <Card className={classes.card_root} draggable>
             <CardHeader
             action={
                 <div className={classes.cardHeader_action}>
@@ -53,7 +68,7 @@ export default function TaskItem(props){
                 </div>
             }
             className={classes.cardHeader_root}
-            title={title}//<input value={title}/>}
+            title={<ContentEditable className={classes.itemTitleSpan} onChange={(e)=>console.log("editable: ",e)}/>}
             />
         </Card>
     );

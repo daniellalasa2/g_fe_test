@@ -27,6 +27,7 @@ export default function AddField(){
         value = {fieldValue}
         onChange  = {e => setFieldValue(e.currentTarget.value)}
         onKeyPress = {handleAddTodo}
+        autocapitalize="on"
       />
     );
 
