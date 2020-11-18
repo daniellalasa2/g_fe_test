@@ -25,7 +25,7 @@ function Main(props){
     const todosList = useSelector(store => store.todos);
     const classes = useStyle();
     const generateTodoItemsFromTodosList = (_todosList)=>{
-      return _todosList.map(item => <TaskItem key={`TaskItem${item.id}`} title={item.title} completedStatus={item.completedStatus}/>);
+      return _todosList.map(item => <TaskItem key={`TaskItem${item.id}`} id={item.id} title={item.title} completedStatus={item.completedStatus}/>);
     };
     return(
         <div className={classes.main_root}>

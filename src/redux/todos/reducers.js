@@ -16,7 +16,8 @@ export default function todos(prevState = initialState, action){
                 ...prevState,
                 {
                     id: newTodoId(prevState),
-                    title: payload.title
+                    title: payload.title,
+                    completedStatus: false
                 }
             ];
 
@@ -25,7 +26,8 @@ export default function todos(prevState = initialState, action){
             return newTodosContainModifiedTodo;
             
         case REMOVE_TODO:
-            const newTodosContainRemovedTodo = prevState.map((todo) => todo.id !== payload.id);
+            // debugger;
+            const newTodosContainRemovedTodo = prevState.filter((todo) => todo.id !== payload.id);
             return newTodosContainRemovedTodo;
 
         default: return prevState;

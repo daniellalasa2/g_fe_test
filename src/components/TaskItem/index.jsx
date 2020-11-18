@@ -25,7 +25,7 @@ export default function TaskItem(props){
     const deleteTodo = useDispatch();
     const handleDeleteTodo = ()=>{
       // TODO: ask from user ,are sure or not?(popover, modal)
-      deleteTodo(removeTodo(id));
+      deleteTodo(removeTodo({id: id}));
     };
     return(
         <Card className={classes.card_root}>

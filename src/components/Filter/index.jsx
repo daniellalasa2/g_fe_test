@@ -19,7 +19,7 @@ export default function Filter(props){
             label="Filter"
             className={classes.filterSelect_root}
             >
-                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="all" default>All</MenuItem>
                 <MenuItem value="completed">Completed</MenuItem>
                 <MenuItem value="incompleted">Incompleted</MenuItem>
             </Select>
