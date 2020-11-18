@@ -8,7 +8,7 @@ export const setFilter = (data = {})=>{
     return {
         type: SET_FILTER,
         payload: {
-            filter: filter? filter : "All"
+            filter: filter? filter : "all"
         }
     }
 }

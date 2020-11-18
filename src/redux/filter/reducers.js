@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-const initialState = {filter:"All"};
+const initialState = {filter:"all"};
 
 export default function filter(prevState = initialState, action){
     const {SET_FILTER} = actionTypes;

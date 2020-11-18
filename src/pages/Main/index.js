@@ -22,10 +22,15 @@ const useStyle = makeStyles({
 });
 
 function Main(props){
-    const todosList = useSelector(store => store.todos);
+    const {todos,filter} = useSelector(store => store);
     const classes = useStyle();
-    const generateTodoItemsFromTodosList = (_todosList)=>{
-      return _todosList.map(item => <TaskItem key={`TaskItem${item.id}`} id={item.id} title={item.title} completedStatus={item.completedStatus}/>);
+    const generateTodoItemsFromTodosList = (_todos)=>{
+      let filteredTodos = Array.from(_todos);
+      if(filter.filter !== "all"){
+        const completedStatus = filter.filter === "completed";
+        filteredTodos = filteredTodos.filter(item=>item.completedStatus === completedStatus);
+      }
+      return filteredTodos.map(item => <TaskItem key={`TaskItem${item.id}`} id={item.id} title={item.title} completedStatus={item.completedStatus}/>);
     };
     return(
       <>
@@ -44,7 +49,7 @@ function Main(props){
             </Grid>
           </Box>
           <Box component="div" m={1}>
-            {generateTodoItemsFromTodosList(todosList)}
+            {generateTodoItemsFromTodosList(todos)}
           </Box>
           </Container>
         </Grid>
