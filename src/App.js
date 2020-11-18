@@ -1,4 +1,5 @@
-import logo from './logo.svg';
+import React from "react";
+import {Provider} from "react-redux";
 import './App.css';
 import Main from './pages/Main';
 import store from "./redux/store";

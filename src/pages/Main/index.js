@@ -24,15 +24,15 @@ function Main(props){
     const classes = useStyle();
     return(
         <div className={classes.main_root}>
-        <Grid  xl="3" lg="5" md="6" sm="12" xs="12">
-            <HeaderBar />
+        <Grid>
+          <HeaderBar />
           <Container className={classes.container_root}>
           <Box component="div">
-            <Grid container direction="row" xs="12" lg="12" md="12" xl="12" justify="center" spacing={1}>
-              <Grid xs="6" lg="8" item>
+            <Grid container direction="row" justify="center" spacing={1}>
+              <Grid item xs={6} lg={8}>
                <AddField />
               </Grid>
-              <Grid item xs="6" lg="4">
+              <Grid item xs={6} lg={4}>
                 <Filter />
               </Grid>
             </Grid>
