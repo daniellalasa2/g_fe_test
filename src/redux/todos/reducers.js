@@ -12,13 +12,14 @@ export default function todos(prevState = initialState, action){
     switch(type){
 
         case ADD_TODO:
+            // Add todo into first index of todos list
             return [
-                ...prevState,
                 {
                     id: newTodoId(prevState),
                     title: payload.title,
                     completedStatus: false
-                }
+                },
+                ...prevState
             ];
 
         case EDIT_TODO:

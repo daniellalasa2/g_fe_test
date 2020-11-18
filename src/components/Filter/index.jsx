@@ -20,7 +20,6 @@ export default function Filter(props){
 
     const handleFilterChange = (e)=>{
         dispatchFilter(setFilter({filter:e.target.value}));
-
     }
     return(
         <FormControl variant="outlined">
