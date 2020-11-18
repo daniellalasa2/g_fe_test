@@ -1,4 +1,5 @@
 import React from "react";
+import {useSelector} from "react-redux";
 import {Grid,Box,Container,makeStyles} from "@material-ui/core";
 import {AddField,Filter,HeaderBar,TaskItem} from "../../components";
 
@@ -21,7 +22,11 @@ const useStyle = makeStyles({
 });
 
 function Main(props){
+    const todosList = useSelector(store => store.todos);
     const classes = useStyle();
+    const generateTodoItemsFromTodosList = (_todosList)=>{
+      return _todosList.map(item => <TaskItem key={`TaskItem${item.id}`} title={item.title} completedStatus={item.completedStatus}/>);
+    };
     return(
         <div className={classes.main_root}>
         <Grid>
@@ -38,7 +43,7 @@ function Main(props){
             </Grid>
           </Box>
           <Box component="div" m={1}>
-            <TaskItem title={"New task"}/>
+            {generateTodoItemsFromTodosList(todosList)}
           </Box>
           </Container>
         </Grid>

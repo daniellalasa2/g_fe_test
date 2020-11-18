@@ -25,7 +25,7 @@ export default function TaskItem(props){
     const deleteTodo = useDispatch();
     const handleDeleteTodo = ()=>{
       // TODO: ask from user ,are sure or not?(popover, modal)
-      deleteTodo(removeTodo(props.id));
+      deleteTodo(removeTodo(id));
     };
     return(
         <Card className={classes.card_root}>
@@ -39,7 +39,7 @@ export default function TaskItem(props){
                 </div>
             }
             className={classes.cardHeader_root}
-            title={"Test"}
+            title={title}
             />
         </Card>
     );
