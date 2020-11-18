@@ -25,7 +25,7 @@ function Main(props){
     return(
         <div className={classes.main_root}>
         <Grid>
-          <HeaderBar />
+          <HeaderBar title="Todos"/>
           <Container className={classes.container_root}>
           <Box component="div">
             <Grid container direction="row" justify="center" spacing={1}>
