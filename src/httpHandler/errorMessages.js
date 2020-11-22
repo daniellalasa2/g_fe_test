@@ -117,7 +117,7 @@ export default [
     isRange: true,
     code: [501, 502],
     message: "Server error, try later",
-    success: falses,
+    success: false,
   },
   {
     isRange: false,

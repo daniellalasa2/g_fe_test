@@ -4,10 +4,12 @@ import { AppBar, Toolbar, Typography } from "@material-ui/core";
 
 /**
  * Header of application
- * @param {Obj} props.title
+ *
+ * @param {string} title - Title of HeaderBar
+ * @param {counter} counter - Header list length counter
+ * @param {Obj} position - Type of header position : 'absolute' | 'fixed' | 'relative' | 'static' | 'sticky'
  */
-function HeaderBar(props) {
-  const { title, counter, position } = props;
+function HeaderBar({ title, counter, position }) {
   return (
     <AppBar position={position}>
       <Toolbar>
@@ -24,7 +26,7 @@ HeaderBar.propTypes = {
   counter: PropTypes.number,
   position: PropTypes.string,
 };
-props.defaultProps = {
+HeaderBar.defaultProps = {
   position: "static",
 };
 

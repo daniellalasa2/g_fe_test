@@ -19,6 +19,7 @@ const useStyle = makeStyles({
 });
 
 // List of filters for dynamic filter generating
+// TODO: make a constant file for dynamic filter generating or using an api call to get list of filters
 const filtersList = [
   { id: 1, title: "All", value: "all" },
   { id: 2, title: "Incomplete", value: "incomplete" },
@@ -27,10 +28,10 @@ const filtersList = [
 export default function Filter(props) {
   const classes = useStyle();
   const activeFilter = useSelector((store) => store.filter.filter);
-  const dispatchFilter = useDispatch();
+  const dispatch = useDispatch();
 
   const handleFilterChange = (e) => {
-    dispatchFilter(setFilter({ filter: e.target.value }));
+    dispatch(setFilter({ filter: e.target.value }));
   };
   return (
     <FormControl variant="outlined" className={classes.formControl_root}>

@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Grid, Box, makeStyles } from "@material-ui/core";
 import { AddField, Filter, HeaderBar, TaskItem } from "../../components";
-
+import { setAllTodosWithApiCall } from "../../redux/todos/actions";
 const useStyle = makeStyles((theme) => ({
   filterSelect_root: {
     width: "100%",
@@ -24,10 +24,15 @@ const useStyle = makeStyles((theme) => ({
 
 function Main() {
   const { todos, filter } = useSelector((store) => store);
+  const dispatchInitialTodosList = useDispatch();
   const classes = useStyle();
   // using localstate to handle inner proccesses inside the component
   const [listElements, setListElements] = useState([]);
   const [listCounter, setListCounter] = useState(0);
+
+  useEffect(() => {
+    dispatchInitialTodosList(setAllTodosWithApiCall());
+  }, [useDispatch, useSelector]);
 
   // componentDidUpdate tracks filter prop
   useEffect(() => {
@@ -47,17 +52,17 @@ function Main() {
 
     // If filter is not the default ,then filter the list od DOMs based on selected filter
     if (filter.filter !== "all") {
-      const completedStatus = filter.filter === "completed";
+      const completed = filter.filter === "completed";
       filteredTodos = filteredTodos.filter(
-        (item) => item.completedStatus === completedStatus
+        (item) => item.completed === completed
       );
     }
     return filteredTodos.map((item) => (
       <TaskItem
         key={`TaskItem${item.id}`}
         id={item.id}
-        title={item.title}
-        completedStatus={item.completedStatus}
+        description={item.description}
+        completed={item.completed}
       />
     ));
   };

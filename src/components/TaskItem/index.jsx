@@ -1,6 +1,9 @@
 import React, { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { removeTodo, editTodo } from "../../redux/todos/actions";
+import {
+  removeTodoWithApiCall,
+  editTodoWithApiCall,
+} from "../../redux/todos/actions";
 import classNames from "classnames";
 import ContentEditable from "react-contenteditable";
 import {
@@ -12,6 +15,7 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
+import PropTypes from "prop-types";
 
 const useStyle = makeStyles((theme) => ({
   card_root: {
@@ -31,22 +35,21 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export default function TaskItem(props) {
-  const { id, title, completedStatus } = props;
+function TaskItem({ id, description, completed }) {
   const classes = useStyle();
 
   const dispatchRemoveTodo = useDispatch();
   const dispatchEditTodo = useDispatch();
 
   const handleDeleteTodo = () => {
-    // TODO: ask from user ,are sure or not?(popover, modal)
-    dispatchRemoveTodo(removeTodo({ id }));
+    // TODO: Ask user ,are sure or not?(popover, modal)
+    dispatchRemoveTodo(removeTodoWithApiCall(id));
   };
-  const handleEditTodo = (_title) => {
-    dispatchEditTodo(editTodo({ id, title: _title }));
+  const handleEditTodo = (_description) => {
+    dispatchEditTodo(editTodoWithApiCall(id, { description: _description }));
   };
   const toggleTaskStatus = () => {
-    dispatchEditTodo(editTodo({ id, completedStatus: !completedStatus }));
+    dispatchEditTodo(editTodoWithApiCall(id, { completed: !completed }));
   };
 
   return (
@@ -58,14 +61,10 @@ export default function TaskItem(props) {
               <DeleteIcon />
             </IconButton>
             <Chip
-              label={completedStatus ? "Completed" : "Incomplete"}
-              color={completedStatus ? "primary" : "secondary"}
+              label={completed ? "Completed" : "Incomplete"}
+              color={completed ? "primary" : "secondary"}
               icon={
-                completedStatus ? (
-                  <DoneIcon style={{ direction: "right" }} />
-                ) : (
-                  <></>
-                )
+                completed ? <DoneIcon style={{ direction: "right" }} /> : <></>
               }
               onClick={toggleTaskStatus}
             />
@@ -75,7 +74,7 @@ export default function TaskItem(props) {
         title={
           <ContentEditable
             tagName="span"
-            html={title ? title : "New task"}
+            html={description}
             className={classNames(classes.itemTitleSpan)}
             onBlur={(e) => handleEditTodo(e.currentTarget.innerText.trim())}
           />
@@ -84,3 +83,14 @@ export default function TaskItem(props) {
     </Card>
   );
 }
+
+TaskItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  completed: PropTypes.bool.isRequired,
+};
+
+TaskItem.defaultProps = {
+  description: "New task",
+};
+export default TaskItem;

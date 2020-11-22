@@ -1,35 +1,36 @@
-import { axios } from "axios";
-import errMessages from "./errorMessages";
+import axios from "axios";
 import config from "./config";
-
+import errMessages from "./errorMessages";
 /**
- * process status codes and return appropriate result for error handling.
+ * process status codes and return appropriate result based on erorMessages config file for error handling.
  *
- * @param {int} statusCode - The integer in question
+ * @param {int} statusCode
  */
 function processStatus(statusCode) {
-  const resultObj = { success: true, message: null };
+  const resultObj = { success: false, message: null, code: statusCode };
   const statusObj = errMessages.filter((item) => {
+    //Check if item is a range then check is statusCode falls in the range or not
     if (item.isRange) {
-      if (item.code[0] <= statusCode || item.code[1] >= statusCode) {
+      if (item.code[0] <= statusCode && item.code[1] >= statusCode) {
         return item;
       }
     } else {
+      //Check if item type is not range but contains various of status codes
+      //then check if statusCode is in the array or not
       if (Array.isArray(item.code) && item.code.indexOf(statusCode) > -1) {
         return item;
       } else if (item.code === statusCode) {
         return item;
       }
     }
-    return item;
   });
-  resultObj.success = statusObj.success;
-  resultObj.message = statusObj.message;
+  resultObj.success = statusObj[0].success;
+  resultObj.message = statusObj[0].message;
   return resultObj;
 }
 
 // Axios request default configs
-const ax = axios.create({
+const axiosInstance = axios.create({
   baseURL: config.BASEURL,
   headers: {
     Authorization: config.MOCK_TOKEN,
@@ -39,11 +40,11 @@ const ax = axios.create({
     const { success } = processStatus(status);
     return success;
   },
-  timeout: 10000, // 10s request timeout
+  timeout: 20000, // 20s timeout for requests
 });
 
 // Error handling for http responses
-ax.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (res) => {
     const { code, message } = processStatus(res.status);
     res.status = code;
@@ -55,4 +56,4 @@ ax.interceptors.response.use(
   }
 );
 
-export default ax;
+export { axiosInstance };

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addTodo } from "../../redux/todos/actions";
+import { addTodoWithApiCall } from "../../redux/todos/actions";
 import { TextField } from "@material-ui/core";
 
 // This component does not accepts props at this moment
@@ -11,10 +11,10 @@ function AddField() {
 
   const handleAddTodo = (e) => {
     // If user hits Enter
+    // remove spaces and break from user input
     if (fieldValue.trim().length > 0 && e.charCode === 13) {
-      // Remove input value
-      setFieldValue("");
-      dispatchAddTodo(addTodo({ title: fieldValue }));
+      setFieldValue(""); // Reset input value
+      dispatchAddTodo(addTodoWithApiCall({ description: fieldValue }));
     }
   };
   return (
