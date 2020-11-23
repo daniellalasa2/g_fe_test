@@ -65,7 +65,7 @@ export const setAllTodosWithApiCall = () => async (dispatch) => {
   http
     .getTodos()
     .then((res) => {
-      const todosList = res.data.data;
+      const todosList = res.data.data.reverse(); // Sort from latest to oldest
       if (todosList.length > 0) {
         dispatch(setAllTodos(todosList));
         dispatch(toggleTodosListNetworkStatus({ status: "idle" }));

@@ -4,7 +4,12 @@ import { Grid, Box, makeStyles } from "@material-ui/core";
 import { AddField, Filter, HeaderBar, TaskItem } from "../../components";
 import { setAllTodosWithApiCall } from "../../redux/todos/actions";
 import { Skeleton } from "@material-ui/lab";
+
 const useStyle = makeStyles((theme) => ({
+  skeleton_root: {
+    marginTop: theme.spacing(3),
+    borderRadius: "5px",
+  },
   filterSelect_root: {
     width: "100%",
   },
@@ -27,6 +32,7 @@ function Main() {
   const state = useSelector((store) => store);
   const { filter } = state;
   const todos = state.todos.list;
+  const networkStatus = state.todos.status;
 
   const dispatchInitialTodosList = useDispatch();
   const classes = useStyle();
@@ -38,22 +44,25 @@ function Main() {
   const generateTodoItemsFromTodosList = () => {
     let filteredTodos = Array.from(todos); // To prevent eventual mutation
     let result = [];
-
-    if (filter.filter !== "all") {
-      filteredTodos = filteredTodos.filter(
-        (item) => item.completed === (filter.filter === "completed")
-      );
+    if (filteredTodos.length > 0) {
+      if (filter.filter !== "all") {
+        filteredTodos = filteredTodos.filter(
+          (item) => item.completed === (filter.filter === "completed")
+        );
+      }
+      result = filteredTodos.map((item) => (
+        <TaskItem
+          key={`TaskItem${item.id}`}
+          id={item.id}
+          description={item.description}
+          completed={item.completed}
+        />
+      ));
+      return result;
     }
-    result = filteredTodos.map((item) => (
-      <TaskItem
-        key={`TaskItem${item.id}`}
-        id={item.id}
-        description={item.description}
-        completed={item.completed}
-      />
-    ));
-
-    return result;
+    if (networkStatus === "pending" && filteredTodos.length === 0) {
+      return generateSkeleton(3);
+    }
   };
 
   const generateSkeleton = (numberOfChilds) => {
@@ -61,10 +70,11 @@ function Main() {
     for (let i = 0; i < numberOfChilds; i++) {
       childArr.push(
         <Skeleton
+          className={classes.skeleton_root}
           key={`skeleton${i}`}
           variant="rect"
           width={"100%"}
-          height={"50"}
+          height={"80px"}
         />
       );
     }

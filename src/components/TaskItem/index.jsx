@@ -45,8 +45,10 @@ function TaskItem({ id, description, completed }) {
     // TODO: Ask user ,are sure or not?(popover, modal)
     dispatchRemoveTodo(removeTodoWithApiCall(id));
   };
-  const handleEditTodo = (_description) => {
-    dispatchEditTodo(editTodoWithApiCall(id, { description: _description }));
+  const handleEditTodo = (_value) => {
+    // Do not update todo if nothing isn't changed
+    if (description !== _value)
+      dispatchEditTodo(editTodoWithApiCall(id, { description: _value }));
   };
   const toggleTaskStatus = () => {
     dispatchEditTodo(editTodoWithApiCall(id, { completed: !completed }));
