@@ -28,10 +28,10 @@ const filtersList = [
 export default function Filter(props) {
   const classes = useStyle();
   const activeFilter = useSelector((store) => store.filter.filter);
-  const dispatch = useDispatch();
+  const dispatchFilter = useDispatch();
 
   const handleFilterChange = (e) => {
-    dispatch(setFilter({ filter: e.target.value }));
+    dispatchFilter(setFilter({ filter: e.target.value }));
   };
   return (
     <FormControl variant="outlined" className={classes.formControl_root}>

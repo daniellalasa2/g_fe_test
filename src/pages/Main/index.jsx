@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Grid, Box, makeStyles } from "@material-ui/core";
 import { AddField, Filter, HeaderBar, TaskItem } from "../../components";
 import { setAllTodosWithApiCall } from "../../redux/todos/actions";
+import { Skeleton } from "@material-ui/lab";
 const useStyle = makeStyles((theme) => ({
   filterSelect_root: {
     width: "100%",
@@ -23,41 +24,27 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 function Main() {
-  const { todos, filter } = useSelector((store) => store);
+  const state = useSelector((store) => store);
+  const { filter } = state;
+  const todos = state.todos.list;
+
   const dispatchInitialTodosList = useDispatch();
   const classes = useStyle();
-  // using localstate to handle inner proccesses inside the component
-  const [listElements, setListElements] = useState([]);
-  const [listCounter, setListCounter] = useState(0);
 
   useEffect(() => {
     dispatchInitialTodosList(setAllTodosWithApiCall());
-  }, [useDispatch, useSelector]);
+  }, []);
 
-  // componentDidUpdate tracks filter prop
-  useEffect(() => {
-    const items = generateTodoItemsFromTodosList(todos);
-    setListElements(items);
-    setListCounter(items.length);
-  }, [filter]);
+  const generateTodoItemsFromTodosList = () => {
+    let filteredTodos = Array.from(todos); // To prevent eventual mutation
+    let result = [];
 
-  // componentDidUpdate tracks todos prop
-  useEffect(() => {
-    setListElements(generateTodoItemsFromTodosList(todos));
-  }, [todos]);
-
-  const generateTodoItemsFromTodosList = (_todos) => {
-    // To prevent eventual mutation
-    let filteredTodos = Array.from(_todos);
-
-    // If filter is not the default ,then filter the list od DOMs based on selected filter
     if (filter.filter !== "all") {
-      const completed = filter.filter === "completed";
       filteredTodos = filteredTodos.filter(
-        (item) => item.completed === completed
+        (item) => item.completed === (filter.filter === "completed")
       );
     }
-    return filteredTodos.map((item) => (
+    result = filteredTodos.map((item) => (
       <TaskItem
         key={`TaskItem${item.id}`}
         id={item.id}
@@ -65,11 +52,27 @@ function Main() {
         completed={item.completed}
       />
     ));
+
+    return result;
   };
 
+  const generateSkeleton = (numberOfChilds) => {
+    const childArr = [];
+    for (let i = 0; i < numberOfChilds; i++) {
+      childArr.push(
+        <Skeleton
+          key={`skeleton${i}`}
+          variant="rect"
+          width={"100%"}
+          height={"50"}
+        />
+      );
+    }
+    return childArr;
+  };
   return (
     <>
-      <HeaderBar title="Todos" counter={listCounter} />
+      <HeaderBar title="Todos" counter={todos.length} />
       <div className={classes.main_root}>
         <Grid container direction="column" className={classes.container_root}>
           <Box component="div">
@@ -82,7 +85,7 @@ function Main() {
               </Grid>
             </Grid>
           </Box>
-          <Box component="div">{listElements}</Box>
+          <Box component="div">{generateTodoItemsFromTodosList()}</Box>
         </Grid>
       </div>
     </>

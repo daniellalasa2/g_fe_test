@@ -1,11 +1,32 @@
 import * as actionTypes from "./actionTypes";
 import * as http from "../../httpHandler/index";
-const { SET_ALL_TODOS, ADD_TODO, EDIT_TODO, REMOVE_TODO } = actionTypes;
+import { generateId as generateTempId } from "../../utils/generateId";
+
+const {
+  SET_ALL_TODOS,
+  ADD_TODO,
+  EDIT_TODO,
+  REMOVE_TODO,
+  TODOSLIST_NETWORK_STATUS,
+} = actionTypes;
 
 export const setAllTodos = (todosList) => {
   return {
     type: SET_ALL_TODOS,
     payload: todosList,
+  };
+};
+
+/**
+ * Handle todos list network status
+ * @param {string} status - "idle" | "pending" | "successful" | "failed"
+ */
+export const toggleTodosListNetworkStatus = (status) => {
+  return {
+    type: TODOSLIST_NETWORK_STATUS,
+    payload: {
+      status: status,
+    },
   };
 };
 export const addTodo = ({ id, description, completed }) => {
@@ -19,10 +40,13 @@ export const addTodo = ({ id, description, completed }) => {
   };
 };
 
-export const editTodo = (data) => {
+export const editTodo = (id, data) => {
   return {
     type: EDIT_TODO,
-    payload: data,
+    payload: {
+      targetId: id,
+      ...data,
+    },
   };
 };
 
@@ -37,32 +61,38 @@ export const removeTodo = (id) => {
 
 // Async actions (with API call)
 export const setAllTodosWithApiCall = () => async (dispatch) => {
+  dispatch(toggleTodosListNetworkStatus({ status: "pending" }));
   http
     .getTodos()
     .then((res) => {
       const todosList = res.data.data;
-      if (res.data.data.length > 0) {
+      if (todosList.length > 0) {
         dispatch(setAllTodos(todosList));
+        dispatch(toggleTodosListNetworkStatus({ status: "idle" }));
       }
     })
     .catch((err) => {
-      console.error(err);
+      console.error("Getting list of todo from server error: ", err);
     });
 };
 
 export const addTodoWithApiCall = ({ description }) => async (dispatch) => {
+  const tempId = generateTempId().toString();
+  dispatch(addTodo({ id: tempId, description, completed: false }));
   http
     .addTodo(description)
     .then((res) => {
       const { _id, description, completed } = res.data.data;
-      dispatch(addTodo({ id: _id, description, completed }));
+      dispatch(editTodo(tempId, { id: _id, description, completed }));
     })
     .catch((err) => {
-      console.error(err);
+      dispatch(setAllTodosWithApiCall()); // Get todosList from the server again if error happened
+      console.error("Add todo error: ", err);
     });
 };
 
 export const editTodoWithApiCall = (id, data) => async (dispatch) => {
+  dispatch(editTodo(id, data));
   http
     .editTodo(id, data)
     .then((res) => {
@@ -70,18 +100,18 @@ export const editTodoWithApiCall = (id, data) => async (dispatch) => {
       dispatch(editTodo({ id: _id, description, completed }));
     })
     .catch((err) => {
-      console.error(err);
+      dispatch(setAllTodosWithApiCall()); // Get todosList from the server again if error happened
+      console.error("Edit todo error: ", err);
     });
 };
 
 export const removeTodoWithApiCall = (id) => async (dispatch) => {
+  dispatch(removeTodo(id));
   http
     .removeTodo(id)
-    .then((res) => {
-      const { success } = res.data;
-      if (success) dispatch(removeTodo(id));
-    })
+    .then((res) => {})
     .catch((err) => {
-      console.error(err);
+      dispatch(setAllTodosWithApiCall()); // Get todosList from the server again if error happened
+      console.error("Remove todo error: ", err);
     });
 };

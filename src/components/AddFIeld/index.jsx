@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addTodoWithApiCall } from "../../redux/todos/actions";
+import { addTodoWithApiCall, addTodo } from "../../redux/todos/actions";
 import { TextField } from "@material-ui/core";
 
 // This component does not accepts props at this moment
