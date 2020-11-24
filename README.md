@@ -1,6 +1,7 @@
 # Getir front-end test
 
 Author: Danial Lalasa
+
 Leveraged knowledges and libraries: ReactJS, Hooks, Redux, Thunk, CSS in JS techniques, Material-UI
 
 ## Available Scripts
