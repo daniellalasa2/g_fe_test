@@ -1,6 +1,12 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Grid, Box, makeStyles } from "@material-ui/core";
+import {
+  Grid,
+  Box,
+  makeStyles,
+  Snackbar,
+  CircularProgress,
+} from "@material-ui/core";
 import { AddField, Filter, HeaderBar, TaskItem } from "../../components";
 import { setAllTodosWithApiCall } from "../../redux/todos/actions";
 import { Skeleton } from "@material-ui/lab";
@@ -101,6 +107,17 @@ function Main() {
           </Box>
           <Box component="div">{generateTodoItemsFromTodosList()}</Box>
         </Grid>
+        <Snackbar
+          message="Error while saving changes, reloading ..."
+          open={true}
+          // onClose={}
+          autoHideDuration={5000}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          action={<CircularProgress size={25} color="secondary" />}
+        />
       </div>
     </>
   );

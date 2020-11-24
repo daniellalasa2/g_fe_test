@@ -25,7 +25,7 @@ const filtersList = [
   { id: 2, title: "Incomplete", value: "incomplete" },
   { id: 3, title: "Completed", value: "completed" },
 ];
-export default function Filter(props) {
+export default function Filter() {
   const classes = useStyle();
   const activeFilter = useSelector((store) => store.filter.filter);
   const dispatchFilter = useDispatch();

@@ -3,6 +3,12 @@ const initialState = {
   list: [],
   status: "pending", // network request status for todos list - "idle" | "pending" | "successful" | "failed"
 };
+
+/**
+ *  Todos reducer function
+ * @param {Object} prevState - previous state
+ * @param {Object} action - action details
+ */
 export default function todos(prevState = initialState, action) {
   const prevList = prevState.list;
   const {
@@ -42,6 +48,7 @@ export default function todos(prevState = initialState, action) {
       };
 
     case EDIT_TODO:
+      // select todo by its id and replace incoming data from action payload
       const newTodosContainModifiedTodo = prevState.list.map((todo) =>
         todo.id === payload.targetId ? { ...todo, ...payload.editedData } : todo
       );

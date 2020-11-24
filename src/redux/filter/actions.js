@@ -1,8 +1,10 @@
 import * as actionTypes from "./actionTypes";
 const { SET_FILTER } = actionTypes;
 
-// Filter types: All, Incompleted, Completed
-// This action changes the filter value
+/**
+ * This action changes the filter value
+ * @param {string} param0 - type of filter: All | Incompleted | Completed
+ */
 export const setFilter = ({ filter }) => {
   return {
     type: SET_FILTER,

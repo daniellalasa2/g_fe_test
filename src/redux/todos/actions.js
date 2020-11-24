@@ -10,6 +10,10 @@ const {
   TODOSLIST_NETWORK_STATUS,
 } = actionTypes;
 
+/**
+ * Fill todosList state array
+ * @param {string} todosList - list of todos getting from server
+ */
 export const setAllTodos = (todosList) => {
   return {
     type: SET_ALL_TODOS,
@@ -29,6 +33,13 @@ export const toggleTodosListNetworkStatus = (status) => {
     },
   };
 };
+
+/**
+ * Add a todo to the state
+ * @param {string} id - A random id for todo item
+ * @param {string} description - title of todo
+ * @param {boolean} completed - completion status of task
+ */
 export const addTodo = ({ id, description, completed }) => {
   return {
     type: ADD_TODO,
@@ -39,7 +50,11 @@ export const addTodo = ({ id, description, completed }) => {
     },
   };
 };
-
+/**
+ * Selects a todo and edits its value
+ * @param {string} id - target todo id
+ * @param {object} data - todo details that going to be updated
+ */
 export const editTodo = (id, data) => {
   return {
     type: EDIT_TODO,
@@ -50,6 +65,10 @@ export const editTodo = (id, data) => {
   };
 };
 
+/**
+ * Removes a todo by its id
+ * @param {string} id
+ */
 export const removeTodo = (id) => {
   return {
     type: REMOVE_TODO,
@@ -60,6 +79,10 @@ export const removeTodo = (id) => {
 };
 
 // Async actions (with API call)
+
+/**
+ * Get todos list from server and fill the state object
+ */
 export const setAllTodosWithApiCall = () => async (dispatch) => {
   dispatch(toggleTodosListNetworkStatus("pending"));
   http
@@ -76,6 +99,10 @@ export const setAllTodosWithApiCall = () => async (dispatch) => {
     });
 };
 
+/**
+ * Add a todo to the server
+ * @param {string} param0 - title of todo
+ */
 export const addTodoWithApiCall = ({ description }) => async (dispatch) => {
   const tempId = generateTempId().toString();
   dispatch(addTodo({ id: tempId, description, completed: false }));
@@ -91,6 +118,11 @@ export const addTodoWithApiCall = ({ description }) => async (dispatch) => {
     });
 };
 
+/**
+ * Edit a todo and save it on server
+ * @param {string} id
+ * @param {object} data - content of todo that going to be edited
+ */
 export const editTodoWithApiCall = (id, data) => async (dispatch) => {
   dispatch(editTodo(id, data));
   http
@@ -105,6 +137,10 @@ export const editTodoWithApiCall = (id, data) => async (dispatch) => {
     });
 };
 
+/**
+ * Remove a todo from serve by its id
+ * @param {string} id
+ */
 export const removeTodoWithApiCall = (id) => async (dispatch) => {
   dispatch(removeTodo(id));
   http
