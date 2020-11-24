@@ -1,7 +1,7 @@
 import * as actionTypes from "./actionTypes";
 const initialState = {
   list: [],
-  status: "idle", // network request status for todos list - "idle" | "pending" | "successful" | "failed"
+  status: "pending", // network request status for todos list - "idle" | "pending" | "successful" | "failed"
 };
 export default function todos(prevState = initialState, action) {
   const prevList = prevState.list;
@@ -10,7 +10,7 @@ export default function todos(prevState = initialState, action) {
     EDIT_TODO,
     REMOVE_TODO,
     SET_ALL_TODOS,
-    TODOLIST_NETWORK_STATUS,
+    TODOSLIST_NETWORK_STATUS,
   } = actionTypes;
 
   const { payload, type } = action;
@@ -42,10 +42,8 @@ export default function todos(prevState = initialState, action) {
       };
 
     case EDIT_TODO:
-      const targetId = payload.targetId;
-      delete payload.targetId;
       const newTodosContainModifiedTodo = prevState.list.map((todo) =>
-        todo.id === targetId ? { ...todo, ...payload } : todo
+        todo.id === payload.targetId ? { ...todo, ...payload.editedData } : todo
       );
       return { ...prevState, list: newTodosContainModifiedTodo };
 
@@ -55,7 +53,7 @@ export default function todos(prevState = initialState, action) {
       );
       return { ...prevState, list: newTodosContainRemovedTodo };
 
-    case TODOLIST_NETWORK_STATUS:
+    case TODOSLIST_NETWORK_STATUS:
       return { ...prevState, status: payload.status };
 
     default:

@@ -95,4 +95,6 @@ TaskItem.propTypes = {
 TaskItem.defaultProps = {
   description: "New task",
 };
-export default TaskItem;
+
+// sometimes props could be same, so we use memo to prevent ineffective renders
+export default React.memo(TaskItem);

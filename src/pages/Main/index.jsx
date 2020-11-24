@@ -8,7 +8,7 @@ import { Skeleton } from "@material-ui/lab";
 const useStyle = makeStyles((theme) => ({
   skeleton_root: {
     marginTop: theme.spacing(3),
-    borderRadius: "5px",
+    borderRadius: "4px",
   },
   filterSelect_root: {
     width: "100%",
@@ -40,6 +40,10 @@ function Main() {
   useEffect(() => {
     dispatchInitialTodosList(setAllTodosWithApiCall());
   }, []);
+
+  useEffect(() => {
+    console.log(networkStatus);
+  }, [networkStatus]);
 
   const generateTodoItemsFromTodosList = () => {
     let filteredTodos = Array.from(todos); // To prevent eventual mutation

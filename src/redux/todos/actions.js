@@ -45,7 +45,7 @@ export const editTodo = (id, data) => {
     type: EDIT_TODO,
     payload: {
       targetId: id,
-      ...data,
+      editedData: data,
     },
   };
 };
@@ -61,14 +61,14 @@ export const removeTodo = (id) => {
 
 // Async actions (with API call)
 export const setAllTodosWithApiCall = () => async (dispatch) => {
-  dispatch(toggleTodosListNetworkStatus({ status: "pending" }));
+  dispatch(toggleTodosListNetworkStatus("pending"));
   http
     .getTodos()
     .then((res) => {
       const todosList = res.data.data.reverse(); // Sort from latest to oldest
+      dispatch(toggleTodosListNetworkStatus("idle"));
       if (todosList.length > 0) {
         dispatch(setAllTodos(todosList));
-        dispatch(toggleTodosListNetworkStatus({ status: "idle" }));
       }
     })
     .catch((err) => {
