@@ -1,6 +1,7 @@
-# Getting Started with Create React App
+# Getir front-end test
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Author: Danial Lalasa
+Leveraged knowledges and libraries: ReactJS, Hooks, Redux, Thunk, CSS in JS techniques, Material-UI
 
 ## Available Scripts
 
@@ -16,8 +17,7 @@ You will also see any lint errors in the console.
 
 ### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Test cases is not available, in furthur improvement this feature will be added.
 
 ### `yarn build`
 
