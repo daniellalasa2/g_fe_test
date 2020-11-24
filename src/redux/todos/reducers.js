@@ -2,6 +2,7 @@ import * as actionTypes from "./actionTypes";
 const initialState = {
   list: [],
   status: "pending", // network request status for todos list - "idle" | "pending" | "successful" | "failed"
+  error: false,
 };
 
 /**
@@ -61,8 +62,13 @@ export default function todos(prevState = initialState, action) {
       return { ...prevState, list: newTodosContainRemovedTodo };
 
     case TODOSLIST_NETWORK_STATUS:
-      return { ...prevState, status: payload.status };
-
+      // Controling access of action to manipulate other part of state
+      let data = {};
+      if (payload.hasOwnProperty("status"))
+        data = { ...data, status: payload.status };
+      if (payload.hasOwnProperty("error"))
+        data = { ...data, error: payload.error };
+      return { ...prevState, ...data };
     default:
       return prevState;
   }

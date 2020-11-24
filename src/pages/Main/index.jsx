@@ -39,6 +39,7 @@ function Main() {
   const { filter } = state;
   const todos = state.todos.list;
   const networkStatus = state.todos.status;
+  const networkError = state.todos.error;
 
   const dispatchInitialTodosList = useDispatch();
   const classes = useStyle();
@@ -46,10 +47,6 @@ function Main() {
   useEffect(() => {
     dispatchInitialTodosList(setAllTodosWithApiCall());
   }, []);
-
-  useEffect(() => {
-    console.log(networkStatus);
-  }, [networkStatus]);
 
   const generateTodoItemsFromTodosList = () => {
     let filteredTodos = Array.from(todos); // To prevent eventual mutation
@@ -109,9 +106,7 @@ function Main() {
         </Grid>
         <Snackbar
           message="Error while saving changes, reloading ..."
-          open={true}
-          // onClose={}
-          autoHideDuration={5000}
+          open={networkError}
           anchorOrigin={{
             vertical: "bottom",
             horizontal: "left",

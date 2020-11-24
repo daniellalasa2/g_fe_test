@@ -24,13 +24,12 @@ export const setAllTodos = (todosList) => {
 /**
  * Handle todos list network status
  * @param {string} status - "idle" | "pending" | "successful" | "failed"
+ * @param {boolean} error - true: if any http request failed, false: if each http request is successful
  */
-export const toggleTodosListNetworkStatus = (status) => {
+export const toggleTodosListNetworkStatus = (params) => {
   return {
     type: TODOSLIST_NETWORK_STATUS,
-    payload: {
-      status: status,
-    },
+    payload: params,
   };
 };
 
@@ -84,12 +83,12 @@ export const removeTodo = (id) => {
  * Get todos list from server and fill the state object
  */
 export const setAllTodosWithApiCall = () => async (dispatch) => {
-  dispatch(toggleTodosListNetworkStatus("pending"));
+  dispatch(toggleTodosListNetworkStatus({ status: "pending" }));
   http
     .getTodos()
     .then((res) => {
       const todosList = res.data.data.reverse(); // Sort from latest to oldest
-      dispatch(toggleTodosListNetworkStatus("idle"));
+      dispatch(toggleTodosListNetworkStatus({ status: "idle", error: false }));
       if (todosList.length > 0) {
         dispatch(setAllTodos(todosList));
       }
@@ -113,6 +112,7 @@ export const addTodoWithApiCall = ({ description }) => async (dispatch) => {
       dispatch(editTodo(tempId, { id: _id, description, completed }));
     })
     .catch((err) => {
+      dispatch(toggleTodosListNetworkStatus({ status: "idle", error: true }));
       dispatch(setAllTodosWithApiCall()); // Get todosList from the server again if error happened
       console.error("Add todo error: ", err);
     });
@@ -132,6 +132,7 @@ export const editTodoWithApiCall = (id, data) => async (dispatch) => {
       dispatch(editTodo({ id: _id, description, completed }));
     })
     .catch((err) => {
+      dispatch(toggleTodosListNetworkStatus({ status: "idle", error: true }));
       dispatch(setAllTodosWithApiCall()); // Get todosList from the server again if error happened
       console.error("Edit todo error: ", err);
     });
@@ -147,6 +148,7 @@ export const removeTodoWithApiCall = (id) => async (dispatch) => {
     .removeTodo(id)
     .then((res) => {})
     .catch((err) => {
+      dispatch(toggleTodosListNetworkStatus({ status: "idle", error: true }));
       dispatch(setAllTodosWithApiCall()); // Get todosList from the server again if error happened
       console.error("Remove todo error: ", err);
     });
