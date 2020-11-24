@@ -24,6 +24,7 @@ const useStyle = makeStyles((theme) => ({
   },
   cardHeader_root: {
     textAlign: "left",
+    wordBreak: "break-word",
   },
   cardHeader_action: {
     margin: "8px 8px 0 0",

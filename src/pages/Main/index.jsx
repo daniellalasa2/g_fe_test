@@ -30,6 +30,7 @@ const useStyle = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     marginTop: theme.spacing(3),
+    flexDirection: "column",
     width: "auto",
   },
 }));
@@ -104,6 +105,11 @@ function Main() {
           </Box>
           <Box component="div">{generateTodoItemsFromTodosList()}</Box>
         </Grid>
+        {todos.length > 0 && (
+          <p style={{ color: "grey", fontSize: "13px" }}>
+            Click on title of each task to edit
+          </p>
+        )}
         <Snackbar
           message="Error while saving changes, reloading ..."
           open={networkError}
